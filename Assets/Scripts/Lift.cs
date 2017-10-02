@@ -7,13 +7,11 @@ public class Lift : MonoBehaviour
 	public float SPEED = 0.05f;
 	public Shaft shaft;
 
-	// Use this for initialization
 	void Start ()
 	{
 		
 	}
-	
-	// Update is called once per frame
+
 	void Update ()
 	{
 		Vector3 currentPosition = this.transform.position;

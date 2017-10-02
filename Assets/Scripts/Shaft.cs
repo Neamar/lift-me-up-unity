@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class Shaft : MonoBehaviour
 {
-	public int floorHeight = 2;
-	public int numberOfFloors = 4;
+	public Building building;
 
+	public int floorHeight = 2;
 	public int targetFloor = 0;
 
 	// Use this for initialization
 	void Start ()
 	{
 		Vector3 localScale = this.transform.localScale;
-		localScale.y = floorHeight * numberOfFloors;
+		localScale.y = floorHeight * building.floors.Length;
 		this.transform.localScale = localScale;
 	}
 	
