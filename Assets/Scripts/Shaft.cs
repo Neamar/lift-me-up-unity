@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class Shaft : MonoBehaviour
 {
 	public int floorHeight = 2;
-	private int numberOfFloors;
+	public int numberOfFloors = 4;
 
 	public int targetFloor = 0;
 
 	// Use this for initialization
 	void Start ()
 	{
-		numberOfFloors = (int)this.transform.localScale.y / floorHeight;
+		Vector3 localScale = this.transform.localScale;
+		localScale.y = floorHeight * numberOfFloors;
+		this.transform.localScale = localScale;
 	}
 	
 	// Update is called once per frame
