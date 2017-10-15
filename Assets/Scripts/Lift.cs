@@ -11,7 +11,7 @@ public class Lift : MonoBehaviour
 	public float SPEED = 0.05f;
 	public Shaft shaft;
 
-	public int currentState = STATE_IDLE;
+	public int currentState = STATE_MOVING;
 	private Animator animator;
 
 	public List<User> usersBoarding;
