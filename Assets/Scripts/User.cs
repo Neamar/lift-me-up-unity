@@ -2,15 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class User : MonoBehaviour {
+public class User : MonoBehaviour
+{
+	private Lift lift = null;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 		
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 		
+	}
+
+	public void assignLift (Lift lift)
+	{
+		this.lift = lift;
 	}
 }

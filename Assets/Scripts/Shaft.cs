@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Shaft : MonoBehaviour
 {
-	public Building building;
+	public Building Building;
 
 	public int floorHeight = 2;
 	public int targetFloor = 0;
@@ -13,7 +13,7 @@ public class Shaft : MonoBehaviour
 	void Start ()
 	{
 		Vector3 localScale = this.transform.localScale;
-		localScale.y = floorHeight * building.floors.Length;
+		localScale.y = floorHeight * Building.floors.Length;
 		this.transform.localScale = localScale;
 	}
 	
@@ -35,5 +35,10 @@ public class Shaft : MonoBehaviour
 	public float GetTargetFloorCoordinates ()
 	{
 		return targetFloor * floorHeight - transform.localScale.y / 2 + floorHeight / 2;
+	}
+
+	public Floor GetTargetFloor ()
+	{
+		return Building.floors [targetFloor];
 	}
 }
