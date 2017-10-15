@@ -14,7 +14,9 @@ public class Lift : MonoBehaviour
 	public int currentState = STATE_IDLE;
 	private Animator animator;
 
-	private User[] waitingForUsers;
+	public List<User> usersBoarding;
+	public List<User> usersInLift = new List<User> ();
+	public List<User> usersUnboarding = new List<User> ();
 
 	void Start ()
 	{
@@ -40,7 +42,7 @@ public class Lift : MonoBehaviour
 				currentPosition.y -= SPEED;
 			}
 
-			if (Mathf.Abs (targetCoordinate - currentPosition.y) < SPEED) {
+			if (Mathf.Abs (targetCoordinate - currentPosition.y) < SPEED && currentState == STATE_MOVING) {
 				currentPosition.y = targetCoordinate;
 				reachedTargetFloor ();
 			}
@@ -49,6 +51,9 @@ public class Lift : MonoBehaviour
 		}
 	}
 
+	/**
+	 * Lift was called at target floor, and has finished moving
+	 */
 	private void reachedTargetFloor ()
 	{
 		Debug.Log ("Reached target floor");
@@ -56,13 +61,49 @@ public class Lift : MonoBehaviour
 
 		Floor floor = shaft.GetTargetFloor ();
 
+		// Do we need to onboard someone?
 		if (floor.UsersWaiting.Length > 0) {
 			for (int i = 0; i < floor.UsersWaiting.Length; i++) {
 				floor.UsersWaiting [i].assignLift (this);
 			}
-			waitingForUsers = floor.UsersWaiting;
+			usersBoarding = new List<User> (floor.UsersWaiting);
 			floor.UsersWaiting = new User[0];
 			currentState = STATE_WAITING;
+		}
+
+		// Do we need to unboard someone?
+		for (int i = 0; i < usersInLift.Count; i++) {
+			if (usersInLift [i].destination == shaft.GetTargetFloor ()) {
+				currentState = STATE_WAITING;
+				usersUnboarding.Add (usersInLift [i]);
+				usersInLift [i].transform.parent = null; // shaft.Building.transform;
+				usersInLift [i].assignFloor (shaft.GetTargetFloor (), this);
+				currentState = STATE_WAITING;
+			}
+		}
+		usersInLift.RemoveAll (u => usersUnboarding.Contains (u));
+
+		if (currentState != STATE_WAITING) {
+			currentState = STATE_IDLE;
+		}
+	}
+
+	public void UserHasBoarded (User boardedUser)
+	{
+		usersBoarding.Remove (boardedUser);
+		usersInLift.Add (boardedUser);
+		if (usersBoarding.Count == 0) {
+			currentState = STATE_IDLE;
+		}
+
+		boardedUser.transform.parent = this.transform;
+	}
+
+	public void UserHasUnBoarded (User unboardedUser)
+	{
+		usersUnboarding.Remove (unboardedUser);
+		if (usersUnboarding.Count == 0) {
+			currentState = STATE_IDLE;
 		}
 	}
 }
