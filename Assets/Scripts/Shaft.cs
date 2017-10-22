@@ -6,15 +6,13 @@ public class Shaft : MonoBehaviour
 {
 	public Building Building;
 
-	public int floorHeight = 2;
+	public float floorHeight = 2;
 	public int targetFloor = 0;
 
 	// Use this for initialization
 	void Start ()
 	{
-		Vector3 localScale = this.transform.localScale;
-		localScale.y = floorHeight * Building.floors.Length;
-		this.transform.localScale = localScale;
+		floorHeight = (float)Building.floors.Count / 12;
 	}
 	
 	// Update is called once per frame
