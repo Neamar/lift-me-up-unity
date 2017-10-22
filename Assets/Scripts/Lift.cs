@@ -74,7 +74,6 @@ public class Lift : MonoBehaviour
 		// Do we need to unboard someone?
 		for (int i = 0; i < usersInLift.Count; i++) {
 			if (usersInLift [i].destination == shaft.GetTargetFloor ()) {
-				currentState = STATE_WAITING;
 				usersUnboarding.Add (usersInLift [i]);
 				usersInLift [i].transform.parent = null; // shaft.Building.transform;
 				usersInLift [i].assignFloor (shaft.GetTargetFloor (), this);
@@ -92,9 +91,7 @@ public class Lift : MonoBehaviour
 	{
 		usersBoarding.Remove (boardedUser);
 		usersInLift.Add (boardedUser);
-		if (usersBoarding.Count == 0) {
-			currentState = STATE_IDLE;
-		}
+		PotentiallyBackToIdle ();
 
 		boardedUser.transform.parent = this.transform;
 	}
@@ -102,7 +99,12 @@ public class Lift : MonoBehaviour
 	public void UserHasUnBoarded (User unboardedUser)
 	{
 		usersUnboarding.Remove (unboardedUser);
-		if (usersUnboarding.Count == 0) {
+		PotentiallyBackToIdle ();
+	}
+
+	public void PotentiallyBackToIdle ()
+	{
+		if (usersBoarding.Count == 0 && usersUnboarding.Count == 0) {
 			currentState = STATE_IDLE;
 		}
 	}
